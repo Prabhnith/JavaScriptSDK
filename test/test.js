@@ -1,5 +1,5 @@
 
-var SECURE_KEY = "1227d1c4-1385-4d5f-ae73-23e99f74b006";
+var SECURE_KEY = "cdf632cc-7d13-42c6-b052-af733bfa9ab6";
 
 
 var URL = "http://localhost:4730";
@@ -13106,6 +13106,52 @@ describe("App level ACL, for adding deleting tables of an app via clientKey", fu
 
 });
 
+describe('render page', function() {
+
+    it("should render the Login authentication page.", function(done) {
+        this.timeout(100000);
+        var url = URL + '/page/' + CB.appId + '/authentication';
+        if (!window) {
+            request({
+                url: url, //URL to hit
+                method: 'GET'
+            }, function(error, response, body) {
+
+                if (error || response.statusCode === 500 || response.statusCode === 400) {
+                    done("something went wrong...");
+                } else if (body === 'App Not found' || response.statusCode === 404) {
+                    done("App not found");
+                } else {
+                    if (body.indexOf("template") === -1) {
+                        done();
+                    }
+                }
+            });
+        } else {
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: function(response) {
+
+                    if (error || response.statusCode === 500 || response.statusCode === 400) {
+                        done("something went wrong...");
+                    } else if (body === 'App Not found' || response.statusCode === 404) {
+                        done("App not found");
+                    } else {
+
+                        if (body.indexOf("template") === -1) {
+                            done();
+                        }
+
+                    }
+                },
+                error: function(xhr, status, errorThrown) {
+                    done("Something went wrong..");
+                },
+            });
+        }
+    });
+});
 describe("Atomicity Tests",function(done){
 
     it("Should Attach the Database",function(done){
